@@ -1,43 +1,53 @@
 package io.pivotal.pal.tracker;
 
-import org.springframework.http.ResponseEntity;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTimeEntryRepository implements TimeEntryRepository {
-    private HashMap repos = new HashMap();
+    private HashMap<Long, TimeEntry> timeEntries = new HashMap<>();
+
     @Override
     public TimeEntry create(TimeEntry timeEntry) {
-        //return null;
-        timeEntry.setId(repos.size()+1);
-        repos.put(timeEntry.getId(),timeEntry);
-        return timeEntry;
+        Long id = timeEntries.size() + 1L;
+        TimeEntry newTimeEntry = new TimeEntry(
+                id,
+                timeEntry.getProjectId(),
+                timeEntry.getUserId(),
+                timeEntry.getDate(),
+                timeEntry.getHours()
+        );
+
+        timeEntries.put(id, newTimeEntry);
+        return newTimeEntry;
     }
 
     @Override
     public TimeEntry find(Long id) {
-        return (TimeEntry) repos.get(id);
+        return timeEntries.get(id);
     }
 
     @Override
     public List<TimeEntry> list() {
-        return (List<TimeEntry>) new ArrayList<TimeEntry>(repos.values());
+        return new ArrayList<>(timeEntries.values());
     }
 
     @Override
     public TimeEntry update(Long id, TimeEntry timeEntry) {
-        if (repos.containsKey(id)) {
-            return (TimeEntry) repos.put(id, timeEntry);
-        } else {
-            return null;
-        }
-    }
+        TimeEntry updatedEntry = new TimeEntry(
+                id,
+                timeEntry.getProjectId(),
+                timeEntry.getUserId(),
+                timeEntry.getDate(),
+                timeEntry.getHours()
+        );
 
+        timeEntries.replace(id, updatedEntry);
+        return updatedEntry;
+    }
 
     @Override
     public void delete(Long id) {
-        repos.remove(id);
+        timeEntries.remove(id);
     }
 }

@@ -3,27 +3,28 @@ package io.pivotal.pal.tracker;
 import java.time.LocalDate;
 
 public class TimeEntry {
-    //static long id_sub=0;
-    public TimeEntry(long l, long l1, LocalDate parse, int i) {
-        //id_sub++;
-        this.id = -1;
-        this.projectId=l;
-        this.userId=l1;
-        this.date=parse;
-        this.hours=i;
-    }
-
-    public TimeEntry(long l, long l1, long l2, LocalDate parse, int i) {
-        this.id=l;
-        this.projectId=l1;
-        this.userId=l2;
-        this.date=parse;
-        this.hours=i;
-
-    }
+    private long id;
+    private long projectId;
+    private long userId;
+    private LocalDate date;
+    private int hours;
 
     public TimeEntry() {
+    }
 
+    public TimeEntry(long projectId, long userId, LocalDate date, int hours) {
+        this.projectId = projectId;
+        this.userId = userId;
+        this.date = date;
+        this.hours = hours;
+    }
+
+    public TimeEntry(long id, long projectId, long userId, LocalDate date, int hours) {
+        this.id = id;
+        this.projectId = projectId;
+        this.userId = userId;
+        this.date = date;
+        this.hours = hours;
     }
 
     public long getId() {
@@ -34,24 +35,7 @@ public class TimeEntry {
         this.id = id;
     }
 
-    public void setProjectId(long projectId) {
-        this.projectId = projectId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public void setHours(int hours) {
-        this.hours = hours;
-    }
-
     public long getProjectId() {
-
         return projectId;
     }
 
@@ -67,14 +51,38 @@ public class TimeEntry {
         return hours;
     }
 
-    private long id;
-    private long projectId;
-    private long userId;
-    private LocalDate date;
-    private int hours;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TimeEntry timeEntry = (TimeEntry) o;
+
+        if (id != timeEntry.id) return false;
+        if (projectId != timeEntry.projectId) return false;
+        if (userId != timeEntry.userId) return false;
+        if (hours != timeEntry.hours) return false;
+        return date != null ? date.equals(timeEntry.date) : timeEntry.date == null;
+    }
 
     @Override
-    public boolean equals(Object obj) {
-        return true;
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (int) (projectId ^ (projectId >>> 32));
+        result = 31 * result + (int) (userId ^ (userId >>> 32));
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + hours;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "TimeEntry{" +
+                "id=" + id +
+                ", projectId=" + projectId +
+                ", userId=" + userId +
+                ", date='" + date + '\'' +
+                ", hours=" + hours +
+                '}';
     }
 }

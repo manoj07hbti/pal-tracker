@@ -82,7 +82,7 @@ public class TimeEntryApiTest {
         assertThat(readJson.read("$.hours", Long.class)).isEqualTo(8);
     }
 
-    @Ignore
+
     @Test
     public void testUpdate() throws Exception {
         Long id = createTimeEntry();

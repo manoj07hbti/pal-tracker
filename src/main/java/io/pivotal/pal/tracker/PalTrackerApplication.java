@@ -17,13 +17,12 @@ public class PalTrackerApplication {
     }
 
     @Bean
-    public TimeEntryRepository returnImplObject()
-    {
+    TimeEntryRepository timeEntryRepository() {
         return new InMemoryTimeEntryRepository();
     }
 
     @Bean
-    public ObjectMapper returnObjectMapper(){
+    public ObjectMapper jsonObjectMapper() {
         return Jackson2ObjectMapperBuilder.json()
                 .serializationInclusion(JsonInclude.Include.NON_NULL) // Don’t include null values
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) //ISODate
